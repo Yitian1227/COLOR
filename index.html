@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <style>
+    body {
+      background-image: url("gif.gif");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      overflow: hidden;
+      height: 100vh;
+      margin: 0;
+      font-family: 'YourDesiredFont', sans-serif;
+      font-weight: bold;
+    }
+
+    #questions {
+      position: absolute;
+      top: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      margin: 0 auto;
+      font-size: 55px;
+      color: white;
+      z-index: 9;
+      text-align: center;
+    }
+
+    #button-container {
+      position: absolute;
+      top: calc(100px + 300px);
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      margin-top: 100px;
+    }
+
+    .bn39 {
+      margin-bottom: 40px;
+      background-image: linear-gradient(135deg, #008aff, #86d472);
+      box-sizing: border-box;
+      color: #ffffff;
+      height: 70px;
+      font-size: 2em;
+      font-weight: 600;
+      padding: 5px 5px;
+      position: center;
+      text-decoration: none;
+      width: 250px;
+      text-align: center;
+      z-index: 2;
+      border-radius: 6px;
+    }
+
+    .bn39:hover {
+      color: #fff;
+    }
+
+    .bn39 .bn39span {
+      align-items: center;
+      padding: 5px 5px;
+      background: #0e0e10;
+      border-radius: 6px;
+      display: flex;
+      justify-content: center;
+      height: 83%;
+      width: 96%;
+    }
+
+    .bn39:hover .bn39span {
+      background: transparent;
+    }
+
+    .Box {
+      background-image: url("大魚.gif");
+      display: none;
+      position: fixed;
+      background-size: contain; 
+      background-repeat: no-repeat;
+      left: 50%;
+      top: 80%; 
+      transform: translate(-50%, -50%); /* 用來將方塊的中心點移到畫面中心 */
+      padding: 300px;
+      z-index: 1000;
+    }
+    .BoxT{
+      font-weight: bold;
+      font-size: 25px;
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 20px 30px;
+      text-align: center;
+      writing-mode: horizontal-tb;
+      width: 400px;
+    }
+    .description-text {
+        text-decoration: overline;
+    }
+
+    
+
+  </style>
+</head>
+<body>
+
+<div id="Box" class="Box">
+  <p class="BoxT">方塊方塊方塊方塊方塊</p>
+</div>
+
+<div id="questions">Your Title Goes Here</div>
+
+<div id="button-container">
+  <a class="bn39" id="button1" href="#"><span class="bn39span">Button 1</span></a>
+  <a class="bn39" id="button2" href="#"><span class="bn39span">Button 2</span></a>
+  <a class="bn39" id="button3" href="#"><span class="bn39span">Button 3</span></a>
+  <a class="bn39" id="button4" href="#"><span class="bn39span">Button 4</span></a>
+</div>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function () {
+  // 定義題目列表
+  var questionsList = [
+    '猜猜哪個顏色是人類最早使用的顏料?',
+    '交通道路上的紅色代表什麼？',
+    '紅色料理為何容易讓人覺得好吃？'
+  ];
+  // 定義按鈕文字列表
+  var buttonOptions = [
+    ['紅色', '藍色', '綠色', '黃色'],
+    ['危險', '自在', '愉悅', '失望'],
+    ['使人食慾大增', '使人降低食慾', '使人想要睡覺', '使人覺得昂貴']
+  ];
+
+  //定義說明文字
+  var descriptions = [
+    '原始人將它塗抹在臉部和身體上，並利用加熱將黃土轉變為紅褐色',
+    '紅色是一種醒目的顏色，可以引起注意，因此常被用來代表危險或警告。',
+    '使人食慾大增'
+  ];
+
+  // 取得#questions元素
+  var questionsElement = document.getElementById('questions');
+
+  // 隨機選取一個題目
+  var randomIndex = Math.floor(Math.random() * questionsList.length);
+  var randomQuestion = questionsList[randomIndex];
+
+  // 設定題目文字
+  questionsElement.textContent = randomQuestion;
+
+  // 取得按鈕元素
+  var buttons = document.querySelectorAll('.bn39');
+
+  // 將按鈕文字設置為正確的文字
+  buttons.forEach(function(button, index) {
+    button.getElementsByTagName('span')[0].textContent = buttonOptions[randomIndex][index];
+  });
+
+  // 添加點擊事件監聽器
+  buttons.forEach(function(button, index) {
+    button.addEventListener('click', function() {
+      if (index === 0) {
+        showBox('正確', descriptions[randomIndex]);
+      } else {
+        showBox('錯誤', descriptions[randomIndex]);
+      }
+    });
+  });
+
+  // 顯示方塊
+  function showBox(result, description) {
+    var Box = document.getElementById('Box');
+    var BoxContent = Box.querySelector('.BoxT');
+    BoxContent.innerHTML = result + '<br>' + '<p class="description-text">' + description + '</p>';
+    Box.style.display = 'block';
+    okButton(); // 添加 OK 按钮
+  }
+
+  // 添加 "OK" 按钮
+  function okButton() {
+    var okButton = document.createElement('button');
+    okButton.textContent = 'OK';
+    okButton.id = 'ok-button'; // 设置按钮的 ID
+    okButton.style.marginTop = '20px'; // 添加一些顶部间距
+
+
+    // 将按钮添加到 .description-text 的下方
+    var descriptionText = document.querySelector('.description-text');
+    descriptionText.parentNode.insertBefore(okButton.cloneNode(true), descriptionText.nextSibling);
+
+    // 添加點擊事件處理
+    okButton.addEventListener('click', function() {
+      // 这里可以添加按钮点击后的操作
+      okButton.style.display = 'none'; // 例如隐藏按钮
+    });
+  }
+
+  // 隱藏方塊
+  function hideBox() {
+    var Box = document.getElementById('Box');
+    Box.style.display = 'none';
+  }
+
+  // 打亂按鈕的順序
+  var buttonContainer = document.getElementById('button-container');
+  var buttonsArray = Array.from(buttonContainer.children);
+  buttonsArray.sort(function() {
+    return 0.5 - Math.random();
+  });
+  buttonsArray.forEach(function(button) {
+    buttonContainer.appendChild(button);
+  });
+
+});
+
+</script>
+
+</body>
+</html>
